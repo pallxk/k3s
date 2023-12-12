@@ -540,17 +540,17 @@ setup_selinux() {
         package_installer=dnf
     fi
 
-    policy_hint="please install:
-    ${package_installer} install -y container-selinux
-    ${package_installer} install -y https://${rpm_site}/k3s/${rpm_channel}/common/${rpm_site_infix}/noarch/${available_version}
-"
-
     if [ "$INSTALL_K3S_SKIP_SELINUX_RPM" = true ] || can_skip_download_selinux || [ ! -d /usr/share/selinux ]; then
         info "Skipping installation of SELinux RPM"
     else
         get_k3s_selinux_version
         install_selinux_rpm ${rpm_site} ${rpm_channel} ${rpm_target} ${rpm_site_infix}
     fi
+
+    policy_hint="please install:
+    ${package_installer} install -y container-selinux
+    ${package_installer} install -y https://${rpm_site}/k3s/${rpm_channel}/common/${rpm_site_infix}/noarch/${available_version}
+"
 
     policy_error=fatal
     if [ "$INSTALL_K3S_SELINUX_WARN" = true ] || [ "${ID_LIKE:-}" = coreos ] || [ "${VARIANT_ID:-}" = coreos ]; then
